@@ -1,8 +1,8 @@
 import Level from "./Level.js";
 import levelPlans from "./util/levelPlans.js";
 import DOMDisplay from "./DOMDisplay.js";
-// Todo: Learn why 'GameState' doesn't work here
-import GameState from "./GameState.js";
+// Todo: Learn why 'State' doesn't work here
+import State from "./State.js";
 import { arrowKeys } from "./util/movingHelpers.js";
 
 const runAnimation = (frameFunction) => {
@@ -20,7 +20,7 @@ const runAnimation = (frameFunction) => {
 
 const runLevel = (level, Display) => {
   const display = new Display(document.body, level);
-  let gameState = GameState.start(level);
+  let gameState = State.start(level);
   let ending = 1;
 
   return new Promise((resolve) => {
@@ -43,10 +43,22 @@ const runLevel = (level, Display) => {
 };
 
 const runGame = async (levels, Display) => {
+  let lives = 1;
+
   for (let level = 0; level < levels.length;) {
+    console.log(`You still have ${lives} ${lives > 1 ? 'lives' : 'life'}.`);
     const status = await runLevel(new Level(levels[level]), Display);
+
+    if (status === 'lost') {
+      lives--;
+      if (lives !== 0) console.log('You lost one life!');
+    }
+
     if (status === 'won') level++;
+    else if (lives === 0) return 'You died!';
   }
+
+  return 'You\'ve won!'
 };
 
-runGame(levelPlans, DOMDisplay).then(() => console.log('You\'ve won!'));
+runGame(levelPlans, DOMDisplay).then((message) => console.log(message));

@@ -1,5 +1,5 @@
 import Vector from "../util/Vector.js";
-import GameState from "../GameState.js";
+import State from "../State.js";
 
 class Lava {
   constructor(position, speed, reset) {
@@ -24,7 +24,7 @@ class Lava {
 Lava.prototype.size = new Vector(1, 1);
 
 Lava.prototype.collide = function(gameState) {
-  return new GameState(gameState.level, gameState.actors, 'lost');
+  return new State(gameState.level, gameState.actors, 'lost');
 };
 
 Lava.prototype.update = function(time, state) {

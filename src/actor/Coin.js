@@ -1,5 +1,5 @@
 import Vector from "../util/Vector.js";
-import GameState from "../GameState.js";
+import State from "../State.js";
 
 class Coin {
   constructor(position, basePosition, wobble) {
@@ -25,7 +25,7 @@ Coin.prototype.collide = function(gameState) {
   const filtered = gameState.actors.filter((actor) => actor !== this);
   let status = gameState.status;
   if (!filtered.some(actor => actor.type === 'coin')) status = 'won';
-  return new GameState(gameState.level, filtered, status);
+  return new State(gameState.level, filtered, status);
 };
 
 // Todo: change to find a better place for these variables

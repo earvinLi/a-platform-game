@@ -1,6 +1,6 @@
 import { overlap } from "./util/movingHelpers.js";
 
-class GameState {
+class State {
   constructor(level, actors, status) {
     this.level = level;
     this.actors = actors;
@@ -8,7 +8,7 @@ class GameState {
   }
 
   static start(level) {
-    return new GameState(level, level.startActors, 'playing');
+    return new State(level, level.startActors, 'playing');
   }
 
   get player() {
@@ -16,14 +16,14 @@ class GameState {
   }
 }
 
-GameState.prototype.update = function(time, keys) {
+State.prototype.update = function(time, keys) {
   const actors = this.actors.map(actor => actor.update(time, this, keys));
-  let newGameState = new GameState(this.level, actors, this.status);
+  let newGameState = new State(this.level, actors, this.status);
 
   if (newGameState.status !== 'playing') return newGameState;
 
   const player = newGameState.player;
-  if (this.level.touches(player.position, player.size, 'lava')) return new GameState(this.level, actors, 'lost');
+  if (this.level.touches(player.position, player.size, 'lava')) return new State(this.level, actors, 'lost');
 
   for (let actor of actors) {
     if (actor !== player && overlap(actor, player)) newGameState = actor.collide(newGameState);
@@ -31,4 +31,4 @@ GameState.prototype.update = function(time, keys) {
   return newGameState;
 };
 
-export default GameState;
+export default State;
