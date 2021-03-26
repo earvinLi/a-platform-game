@@ -5,8 +5,8 @@ import DOMDisplay from "./DOMDisplay.js";
 import State from "./State.js";
 import {
   arrowKeys,
-  handleGamePausing,
-  pausing,
+  trackEscapeKey,
+  gamePaused,
 } from "./util/controllingHelpers.js";
 
 const runAnimation = (frameFunction) => {
@@ -28,10 +28,11 @@ const runLevel = (level, Display) => {
   let ending = 1;
 
   return new Promise((resolve) => {
-    handleGamePausing(() => runAnimation(frame));
+    const escapeKey = trackEscapeKey(() => runAnimation(frame));
+    escapeKey.register();
 
     const frame = (time) => {
-      if (pausing  === true) return false;
+      if (gamePaused) return false;
 
       gameState = gameState.update(time, arrowKeys);
       display.syncState(gameState);
@@ -43,6 +44,8 @@ const runLevel = (level, Display) => {
         return true;
       } else {
         display.clear();
+        arrowKeys.unregister();
+        escapeKey.unregister();
         resolve(gameState.status);
         return false;
       }
