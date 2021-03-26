@@ -1,4 +1,4 @@
-import { overlap } from "./util/movingHelpers.js";
+import { overlap } from "./util/controllingHelpers.js";
 
 class State {
   constructor(level, actors, status) {

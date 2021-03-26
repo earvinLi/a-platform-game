@@ -18,4 +18,16 @@ const trackKeys = (keys) => {
   return down;
 };
 
-export const arrowKeys = trackKeys(['ArrowLeft', 'ArrowRight', 'ArrowUp']);
+export const arrowKeys = trackKeys(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'Escape']);
+
+export let pausing = false;
+export const handleGamePausing = (animationHandler) => {
+  const onEscapePress = (event) => {
+    if (event.key !== 'Escape') return;
+    event.preventDefault();
+    pausing = !pausing;
+    if (pausing !== true) animationHandler();
+  };
+
+  window.addEventListener('keydown', onEscapePress);
+};

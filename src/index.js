@@ -3,7 +3,11 @@ import levelPlans from "./util/levelPlans.js";
 import DOMDisplay from "./DOMDisplay.js";
 // Todo: Learn why 'State' doesn't work here
 import State from "./State.js";
-import { arrowKeys } from "./util/movingHelpers.js";
+import {
+  arrowKeys,
+  handleGamePausing,
+  pausing,
+} from "./util/controllingHelpers.js";
 
 const runAnimation = (frameFunction) => {
   let lastTime = null;
@@ -24,7 +28,11 @@ const runLevel = (level, Display) => {
   let ending = 1;
 
   return new Promise((resolve) => {
-    runAnimation((time) => {
+    handleGamePausing(() => runAnimation(frame));
+
+    const frame = (time) => {
+      if (pausing  === true) return false;
+
       gameState = gameState.update(time, arrowKeys);
       display.syncState(gameState);
 
@@ -38,12 +46,14 @@ const runLevel = (level, Display) => {
         resolve(gameState.status);
         return false;
       }
-    });
+    };
+
+    runAnimation(frame);
   });
 };
 
 const runGame = async (levels, Display) => {
-  let lives = 1;
+  let lives = 3;
 
   for (let level = 0; level < levels.length;) {
     console.log(`You still have ${lives} ${lives > 1 ? 'lives' : 'life'}.`);
@@ -58,7 +68,7 @@ const runGame = async (levels, Display) => {
     else if (lives === 0) return 'You died!';
   }
 
-  return 'You\'ve won!'
+  return 'You\'ve won!';
 };
 
 runGame(levelPlans, DOMDisplay).then((message) => console.log(message));
