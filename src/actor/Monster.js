@@ -18,8 +18,9 @@ class Monster {
 
 Monster.prototype.size = new Vector(1, 1);
 
-Monster.prototype.collide = function (gameState, actor, player) {
-  if (player.position.y + player.size.y - actor.position.y < 0.25) {
+Monster.prototype.collide = function (gameState) {
+  const { player } = gameState;
+  if (player.position.y + player.size.y - this.position.y < 0.25) {
     const filtered = gameState.actors.filter(actor => actor !== this);
     return new State(gameState.level, filtered, gameState.status);
   }
@@ -27,9 +28,11 @@ Monster.prototype.collide = function (gameState, actor, player) {
 };
 
 Monster.prototype.update = function (time, gameState) {
-  const newPosition = this.position.plus(this.speed.times(time));
+  // Todo: Change to enhance this monster chasing and wall bouncing relationship
+  const direction = gameState.player.position.x < this.position.x ? -1 : 1;
+  const newPosition = this.position.plus(this.speed.times(time * direction));
   if (!gameState.level.touches(newPosition, this.size, 'wall')) return new Monster(newPosition, this.speed);
-  return new Monster(this.position, this.speed.times(-1));
+  return this;
 };
 
 export default Monster;

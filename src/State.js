@@ -26,7 +26,7 @@ State.prototype.update = function(time, keys) {
   if (this.level.touches(player.position, player.size, 'lava')) return new State(this.level, actors, 'lost');
 
   for (let actor of actors) {
-    if (actor !== player && overlap(actor, player)) newGameState = actor.collide(newGameState, actor, player);
+    if (actor !== player && overlap(actor, player)) newGameState = actor.collide(newGameState);
   }
   return newGameState;
 };
