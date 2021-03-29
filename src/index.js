@@ -29,6 +29,7 @@ const runLevel = (level, Display) => {
 
   return new Promise((resolve) => {
     const escapeKey = trackEscapeKey(() => runAnimation(frame));
+    arrowKeys.register();
     escapeKey.register();
 
     const frame = (time) => {
@@ -58,7 +59,7 @@ const runLevel = (level, Display) => {
 const runGame = async (levels, Display) => {
   let lives = 3;
 
-  for (let level = 0; level < levels.length;) {
+  for (let level = 1; level < levels.length;) {
     console.log(`You still have ${lives} ${lives > 1 ? 'lives' : 'life'}.`);
     const status = await runLevel(new Level(levels[level]), Display);
 

@@ -27,9 +27,9 @@ Lava.prototype.collide = function(gameState) {
   return new State(gameState.level, gameState.actors, 'lost');
 };
 
-Lava.prototype.update = function(time, state) {
+Lava.prototype.update = function(time, gameState) {
   const newPosition = this.position.plus(this.speed.times(time));
-  if (!state.level.touches(newPosition, this.size, 'wall')) return new Lava(newPosition, this.speed, this.reset);
+  if (!gameState.level.touches(newPosition, this.size, 'wall')) return new Lava(newPosition, this.speed, this.reset);
   else if (this.reset) return new Lava(this.reset, this.speed, this.reset);
   else return new Lava(this.position, this.speed.times(-1));
 };

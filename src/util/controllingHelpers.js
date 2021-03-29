@@ -15,13 +15,16 @@ const trackKeys = (keys) => {
     }
   };
 
-  window.addEventListener('keydown', track);
-  window.addEventListener('keyup', track);
+  down.register = () => {
+    window.addEventListener('keydown', track);
+    window.addEventListener('keyup', track);
+  };
 
   down.unregister = () => {
     window.removeEventListener('keydown', track);
     window.removeEventListener('keyup', track);
   };
+
   return down;
 };
 

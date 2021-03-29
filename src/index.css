@@ -30,6 +30,10 @@
   background: rgb(64, 64, 64);
 }
 
+.monster {
+  background: sandybrown;
+}
+
 /* game */
 .lost .player {
   background: rgb(160, 64, 64);
